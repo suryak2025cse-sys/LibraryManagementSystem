@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping({"/books", "/book"})
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class BookController {
     private final BookServices bookServices;
@@ -61,4 +61,3 @@ public class BookController {
         return ResponseEntity.ok(Map.of("message", msg));
     }
 }
-
