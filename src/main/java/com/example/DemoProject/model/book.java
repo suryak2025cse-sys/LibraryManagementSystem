@@ -1,27 +1,36 @@
 package com.example.DemoProject.model;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 @Entity
-public class book {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String author;
-    private int price;
+    private Integer price;
 
-    public book() {
+    public Book() {
     }
 
-    public book(String title, String author, int price) {
+    public Book(String title, String author, Integer price) {
         this.title = title;
         this.author = author;
         this.price = price;
     }
 
-    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -38,11 +47,11 @@ public class book {
         this.author = author;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }
