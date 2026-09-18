@@ -1,6 +1,8 @@
 package com.example.DemoProject.services;
 
+import com.example.DemoProject.model.Author;
 import com.example.DemoProject.model.Book;
+import com.example.DemoProject.repository.AuthorRepository;
 import com.example.DemoProject.repository.BookRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,12 +13,21 @@ import java.util.List;
 @Service
 public class BookServices {
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
-    public BookServices(BookRepository bookRepository) {
+    public BookServices(BookRepository bookRepository, AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
     }
 
     public Book addBook(Book book) {
+        if (book.getAuthor() != null && book.getAuthor().getId() != null) {
+            Author author = authorRepository.findById(book.getAuthor().getId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Author not found with id: " + book.getAuthor().getId()));
+            book.setAuthor(author);
+        }
         return bookRepository.save(book);
     }
 
@@ -46,7 +57,15 @@ public class BookServices {
             existingBook.setTitle(bookDetails.getTitle());
         }
         if (bookDetails.getAuthor() != null) {
-            existingBook.setAuthor(bookDetails.getAuthor());
+            if (bookDetails.getAuthor().getId() != null) {
+                Author author = authorRepository.findById(bookDetails.getAuthor().getId())
+                        .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Author not found with id: " + bookDetails.getAuthor().getId()));
+                existingBook.setAuthor(author);
+            } else {
+                existingBook.setAuthor(bookDetails.getAuthor());
+            }
         }
         if (bookDetails.getPrice() != null) {
             existingBook.setPrice(bookDetails.getPrice());

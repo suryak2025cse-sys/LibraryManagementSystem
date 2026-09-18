@@ -45,8 +45,8 @@ public class AuthorServices {
         if (authorDetails.getName() != null) {
             existingAuthor.setName(authorDetails.getName());
         }
-        if (authorDetails.getEmail() != null) {
-            existingAuthor.setEmail(authorDetails.getEmail());
+        if (authorDetails.getCountry() != null) {
+            existingAuthor.setCountry(authorDetails.getCountry());
         }
         return authorRepository.save(existingAuthor);
     }

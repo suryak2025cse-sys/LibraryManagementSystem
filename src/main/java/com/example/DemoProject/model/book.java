@@ -1,9 +1,12 @@
 package com.example.DemoProject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Book {
@@ -11,13 +14,17 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String author;
     private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    @JsonIgnoreProperties("books")
+    private Author author;
 
     public Book() {
     }
 
-    public Book(String title, String author, Integer price) {
+    public Book(String title, Author author, Integer price) {
         this.title = title;
         this.author = author;
         this.price = price;
@@ -39,11 +46,11 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 

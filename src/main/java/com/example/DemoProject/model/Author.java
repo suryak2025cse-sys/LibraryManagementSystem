@@ -1,9 +1,15 @@
 package com.example.DemoProject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Author {
@@ -11,14 +17,18 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String email;
+    private String country;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("author")
+    private List<Book> books = new ArrayList<>();
 
     public Author() {
     }
 
-    public Author(String name, String email) {
+    public Author(String name, String country) {
         this.name = name;
-        this.email = email;
+        this.country = country;
     }
 
     public Long getId() {
@@ -37,11 +47,29 @@ public class Author {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCountry() {
+        return country;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+        book.setAuthor(this);
+    }
+
+    public void removeBook(Book book) {
+        books.remove(book);
+        book.setAuthor(null);
     }
 }
